@@ -1,159 +1,188 @@
 import React, { useState } from 'react';
-import { Calendar, Clock, User } from 'lucide-react';
+import Swal from 'sweetalert2';
+import { apiCreateBooking } from '../services/booking';
+import { useNavigate } from 'react-router-dom';
+import img from '../assets/images/bg1.jpg'
+import RootLayout from '../layouts/RootLayout';
 
 const AppointmentBooking = () => {
-  const [step, setStep] = useState(1);
-  const [booking, setBooking] = useState({
-    doctor: '',
-    date: '',
-    time: '',
-    reason: ''
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false)
+  const [formData, setFormData] = useState({
+    title: '',
+    userId: '',
+    staffId: '',
+    location: '',
+    facility: '',
+    startDateTime: '',
+    endDateTime: '',
   });
 
-  // Sample data - in real app, this would come from API
-  const doctors = [
-    { id: 1, name: "Dr. Sarah Johnson", specialty: "General Physician" },
-    { id: 2, name: "Dr. Michael Patel", specialty: "General Physician" }
-  ];
+  const token = localStorage.getItem("token");
+  console.log(token)
 
-  const timeSlots = [
-    "09:00 AM", "10:00 AM", "11:00 AM",
-    "02:00 PM", "03:00 PM", "04:00 PM"
-  ];
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle booking submission
-    console.log("Booking details:", booking);
-    // Show success message
-    setStep(4);
+    setLoading(true);
+
+
+    const payload = {  
+      ...formData,
+      title: formData.title,
+      userId: formData.userId,
+      staffId: formData.staffId,
+      location: formData.location,
+      facility: formData.facility,
+      startDateTime: new Date(formData.startDateTime).toISOString(),
+      endDateTime: new Date(formData.endDateTime).toISOString(),
+    };
+
+    try {
+      const response = await apiCreateBooking(payload);
+
+      if (response.ok) {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Appointment booked successfully',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      }
+       navigate("")
+    } catch (error) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to book appointment',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    } finally{
+      setLoading(false);
+    };
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white rounded-lg shadow p-6">
-      {/* Progress Steps */}
-      <div className="flex justify-between mb-8">
-        {[1, 2, 3].map((num) => (
-          <div 
-            key={num}
-            className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              step >= num ? 'bg-blue-500 text-white' : 'bg-gray-200'
-            }`}
-          >
-            {num}
-          </div>
-        ))}
+   <RootLayout>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+    style={{
+      backgroundImage: `url(${img})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    }}>
+     <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md space-y-6">
+      <h2 className="text-2xl font-bold mb-6 text-center">Book an Appointment</h2>
+
+      <label htmlFor="title" className="block text-sm font-medium mb-2">Title</label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        value={formData.title}
+        onChange={handleChange}
+        required
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+        placeholder="e.g., Follow-up Consultation"
+      />
+
+      <label htmlFor="userId" className="block text-sm font-medium mb-2">User ID</label>
+      <input
+        type="text"
+        id="userId"
+        name="userId"
+        value={formData.userId}
+        onChange={handleChange}
+        required
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
+
+      <label htmlFor="staffId" className="block text-sm font-medium mb-2">Staff ID</label>
+      <input
+        type="text"
+        id="staffId"
+        name="staffId"
+        value={formData.staffId}
+        onChange={handleChange}
+        required
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      />
+
+      <label htmlFor="location" className="block text-sm font-medium mb-2">Location</label>
+      <select
+        id="location"
+        name="location"
+        value={formData.location}
+        onChange={handleChange}
+        required
+        className="w-full p-2 border border-gray-300 rounded mb-4"
+      >
+        <option value="">Select Location</option>
+        <option value="Online">Online</option>
+        <option value="Inperson">In-person</option>
+      </select>
+
+      {/* Facility appears only when Location is In-person */}
+      {formData.location === 'Inperson' && (
+        <>
+          <label htmlFor="facility" className="block text-sm font-medium mb-2">Facility</label>
+          <input
+            type="text"
+            id="facility"
+            name="facility"
+            value={formData.facility}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border border-gray-300 rounded mb-4"
+            placeholder="e.g., Main Clinic Building"
+          />
+        </>
+      )}
+
+      <div className="flex flex-col sm:flex-row gap-4 mb-4">
+        <div className="w-full sm:w-1/2">
+          <label htmlFor="startDateTime" className="block text-sm font-medium mb-2">Start Date & Time</label>
+          <input
+            type="datetime-local"
+            id="startDateTime"
+            name="startDateTime"
+            value={formData.startDateTime}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+
+        <div className="w-full sm:w-1/2">
+          <label htmlFor="endDateTime" className="block text-sm font-medium mb-2">End Date & Time</label>
+          <input
+            type="datetime-local"
+            id="endDateTime"
+            name="endDateTime"
+            value={formData.endDateTime}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit}>
-        {/* Step 1: Select Doctor */}
-        {step === 1 && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold mb-4">Select Doctor</h2>
-            <div className="grid gap-4">
-              {doctors.map((doctor) => (
-                <button
-                  key={doctor.id}
-                  type="button"
-                  className={`p-4 border rounded-lg text-left hover:border-blue-500 ${
-                    booking.doctor === doctor.id ? 'border-blue-500 bg-blue-50' : ''
-                  }`}
-                  onClick={() => {
-                    setBooking({ ...booking, doctor: doctor.id });
-                    setStep(2);
-                  }}
-                >
-                  <div className="flex items-center">
-                    <User className="w-8 h-8 text-gray-400 mr-3" />
-                    <div>
-                      <div className="font-medium">{doctor.name}</div>
-                      <div className="text-sm text-gray-500">{doctor.specialty}</div>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Step 2: Select Date */}
-        {step === 2 && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold mb-4">Select Date</h2>
-            <div className="flex items-center">
-              <Calendar className="w-5 h-5 text-gray-400 mr-2" />
-              <input
-                type="date"
-                className="w-full p-2 border rounded"
-                min={new Date().toISOString().split('T')[0]}
-                onChange={(e) => {
-                  setBooking({ ...booking, date: e.target.value });
-                  setStep(3);
-                }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Step 3: Select Time & Reason */}
-        {step === 3 && (
-          <div className="space-y-6">
-            <div>
-              <h2 className="text-xl font-semibold mb-4">Select Time</h2>
-              <div className="grid grid-cols-3 gap-3">
-                {timeSlots.map((time) => (
-                  <button
-                    key={time}
-                    type="button"
-                    className={`p-2 border rounded text-center hover:border-blue-500 ${
-                      booking.time === time ? 'border-blue-500 bg-blue-50' : ''
-                    }`}
-                    onClick={() => setBooking({ ...booking, time })}
-                  >
-                    <Clock className="w-4 h-4 mx-auto mb-1" />
-                    {time}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-xl font-semibold mb-4">Reason for Visit</h2>
-              <textarea
-                className="w-full p-3 border rounded"
-                rows="3"
-                placeholder="Briefly describe your reason for visit"
-                value={booking.reason}
-                onChange={(e) => setBooking({ ...booking, reason: e.target.value })}
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600"
-              disabled={!booking.time || !booking.reason}
-            >
-              Confirm Booking
-            </button>
-          </div>
-        )}
-
-        {/* Step 4: Confirmation */}
-        {step === 4 && (
-          <div className="text-center space-y-4">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-              <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <h2 className="text-xl font-semibold">Appointment Confirmed!</h2>
-            <p className="text-gray-600">
-              You will receive a confirmation email with the details.
-            </p>
-          </div>
-        )}
-      </form>
-    </div>
+      <button
+        type="submit"
+        className="w-full py-2 px-4 bg-blue-600 text-white font-bold rounded hover:bg-blue-700" disabled={loading}
+      >
+{loading  ? "Booking" : "Book Appointment"}
+        
+      </button>
+    </form>
+   </div>
+   </RootLayout>
   );
 };
 

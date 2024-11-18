@@ -1,66 +1,63 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { apiLoginUser } from '../../services/auth';
 
-const LoginForm = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    contact: '',
-    password: '',
-  });
+const UserLogin = () => {
+      const [errors, setErrors] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+    const navigate = useNavigate();
 
-  const validateForm = () => {
-    const newErrors = {};
-    
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+    const handleSubmit = async (e) => {
+e.preventDefault();
+
+const formData = new FormData(e.target); 
+const email = formData.get("email");
+const password = formData.get("password");
+
+
+
+try{
+setIsLoading(true);
+    const response = await apiLoginUser({ email, password});
+    if (response.status == 200) {
+
+        localStorage.setItem("token", response.data.token); 
+        console.log("token", response.data.token)
+
+        Swal.fire({
+            icon: "Success",
+            title: "Login Successful",
+            text: "You have successfully logged in to your account",
+            confirmButtonText: " OK"
+          });
+ navigate('');
     }
-
-    // Password validation
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
+}
+catch (error) {  
+    console.log(error);
+    if (error.response && error.response.status === 401) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Login Failed',
+        text: 'Unauthorized: Invalid credentials or session expired.',
+        confirmButtonText: 'OK',
+      });
     }
+    else {
+        Swal.fire({
+          icon: "error",
+          title: "Error.",
+          text: "An unexpected error occurred. Please try again later.",
+          confirmButtonText: " OK"
+        }); 
+      }        
+}finally {
+    setIsLoading(false);
+  }
+ };
 
-    return newErrors;
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const newErrors = validateForm();
-
-    if (Object.keys(newErrors).length === 0) {
-      setIsSubmitting(true);
-      try {
-        // API call would go here
-        console.log('Form submitted:', formData);
-        // Redirect to dashboard would go here
-      } catch (error) {
-        setErrors({ submit: 'Login failed. Please check your credentials and try again.' });
-      } finally {
-        setIsSubmitting(false);
-      }
-    } else {
-      setErrors(newErrors);
-    }
-  };
+  
 
   const handleGoogleLogin = async () => {
     try {
@@ -76,7 +73,7 @@ const LoginForm = () => {
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
         <div>
           <h2 className="text-center text-3xl font-extrabold text-gray-900">
-            Log in to your account
+            Log in as a User
           </h2>
         </div>
 
@@ -98,12 +95,9 @@ const LoginForm = () => {
               type="email"
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              value={formData.email}
-              onChange={handleChange}
+              // value={formData.email}
+              // onChange={handleChange}
             />
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-            )}
           </div>
 
           {/* Password */}
@@ -117,12 +111,9 @@ const LoginForm = () => {
               type="password"
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              value={formData.password}
-              onChange={handleChange}
+              // value={formData.password}
+              // onChange={handleChange}
             />
-            {errors.password && (
-              <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-            )}
           </div>
 
           <div className="flex items-center justify-between">
@@ -148,10 +139,10 @@ const LoginForm = () => {
           <div>
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isLoading}
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
             >
-              {isSubmitting ? 'Logging in...' : 'Log in'}
+              {isLoading ? 'Logging in...' : 'Log in'}
             </button>
           </div>
 
@@ -204,4 +195,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default UserLogin;
