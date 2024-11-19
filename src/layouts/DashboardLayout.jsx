@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, LogOut } from "lucide-react";
+import Navbar from "../components/Navbar";
 
 const DashboardLayout = ({ children, links = [] }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Sidebar is open by default
 
   return (
-    <div className="flex h-screen">
+   <div>
+    <Navbar/>
+     <div className="flex h-screen">
       {/* Sidebar */}
       <div
         className={`bg-[#0CBFC7] text-white w-64 transition-transform ${
@@ -42,6 +45,7 @@ const DashboardLayout = ({ children, links = [] }) => {
         {children}
       </div>
     </div>
+   </div>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { apiGetSingleUser } from '../../../services/user'; // Update service import
+import { apiGetSingleUser } from '../../../services/users'; // Update service import
 
 const SingleUser = () => {
     const { id } = useParams(); // Get user ID from URL
@@ -37,7 +37,7 @@ const SingleUser = () => {
                 <div className="bg-gray-100 p-6 rounded-lg shadow-md">
                     <h1 className="text-2xl font-bold text-cyan-500">{`${user.firstName} ${user.lastName}`}</h1>
                     <p>Role: {user.role}</p>
-                    <p>Organization: {user.organization || 'N/A'}</p>
+                    <p>Organization: {user.location || 'N/A'}</p>
                     <p>Email: {user.email}</p>
                     <p>Phone: {user.phone || 'N/A'}</p>
                     <p>Department: {user.department || 'N/A'}</p>

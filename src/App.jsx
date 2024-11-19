@@ -95,10 +95,16 @@ function App() {
       path: "/staff-dashboard",
       element: <StaffDashboard/>,
       children : [
+        {
+          index: true,
+          element: <AllUsers/>
+        },
+        {
+          path: "singleuser/:id",
+          element: <SingleUser/>,
+        },
 
-       
-
-        
+  
       ]
     },
     {

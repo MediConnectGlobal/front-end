@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { apiGetAllStaff } from '../services/staff';
 import img from '../assets/images/hero10.jpg';
 import {useNavigate} from 'react-router-dom';
+import RootLayout from '../layouts/RootLayout';
 
 const StaffComponent = () => {
     const [staffList, setStaffList] = useState([]);
@@ -52,7 +53,8 @@ const navigate = useNavigate();
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
-        <div className="container mx-auto p-4">
+       <RootLayout>
+         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold text-cyan-500 text-center mb-6">Meet Our Team</h1>
             {loading && <p className="text-center">Loading...</p>}
             {error && <p className="text-center text-red-500">{error}</p>}
@@ -113,6 +115,7 @@ const navigate = useNavigate();
                 </div>
             )} */}
         </div>
+       </RootLayout>
     );
 };
 

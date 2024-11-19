@@ -90,17 +90,6 @@ const navigate = useNavigate();
                 ))}
             </div>
 
-            {/* {staffDetail && (
-                <div className="bg-gray-100 p-4 mt-6 rounded-lg">
-                    <h2 className="text-xl font-bold">Staff Details</h2>
-                    <p>Name: {staffDetail.firstName} {staffDetail.lastName}</p>
-                    <p>Role: {staffDetail.role}</p>
-                    <p>Facility: {staffDetail.facility}</p>
-                    <p>Department: {staffDetail.department}</p>
-                    <p>Email: {staffDetail.email}</p>
-                    <p>Specialty: {staffDetail.specialty}</p>
-                </div>
-            )} */}
         </div>
     );
 };
