@@ -9,7 +9,7 @@ import LandingPage from './pages/LandingPage';
 import StaffComponent from './constants/StaffComponent';
 import LoginPage from './pages/forms/LoginPage';
 // import UserLogin from './pages/forms/UserLogin';
-// import StaffLogin from './pages/forms/StaffLogin';
+import StaffLogin from './pages/forms/StaffLogin';
 import Services from './pages/empty/services';
 import Doctors from './pages/empty/Doctors';
 import Contact from './pages/empty/Contact';
@@ -24,8 +24,27 @@ import AllStaff from './pages/dashboard/admin/AllStaff';
 import AllUsers from './pages/dashboard/admin/AllUsers';
 import SingleStaff from './pages/dashboard/admin/SingleStaff';
 import SingleUser from './pages/dashboard/staff/SingleUser';
+import Booking from './pages/dashboard/user/booking';
+import AllStaffForUser from './pages/dashboard/user/AllStaffForUser';
+import SingleStaffForUser from './pages/dashboard/user/SingleStaffForUser';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import Prescription from './pages/dashboard/staff/Prescription';
+import MyPrescriptions from './pages/dashboard/user/MyPrescriptions';
+import MyBookings from './pages/dashboard/staff/MyBookings';
+
+
+
 
 function App() {
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  
+  // Debug log
+  console.log('Google Client ID loaded:', !!clientId);
+
+  if (!clientId) {
+    console.error('Google Client ID is not configured properly');
+  }
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -60,15 +79,16 @@ function App() {
     //   path:"/userlogin" ,
     //   element: <UserLogin/>  ,
     // },
-    // {
-    //   path:"/stafflogin" ,
-    //   element: <StaffLogin/>  ,
-    // },
+    {
+      path:"/stafflogin" ,
+      element: <StaffLogin/>  ,
+    },
 
     {
       path: "/booking",
       element: <AppointmentBooking />,
     },
+    
 
     {
       path: "/staff",
@@ -103,7 +123,14 @@ function App() {
           path: "singleuser/:id",
           element: <SingleUser/>,
         },
-
+        {
+          path: "prescription",
+          element: <Prescription/>,
+        },
+        {
+          path: "my-bookings",
+          element: <MyBookings/>,
+        },
   
       ]
     },
@@ -111,6 +138,23 @@ function App() {
       path: "/user-dashboard",
       element: <UserDashboard/>,
       children : [
+      {
+        index: true,
+        element: <Booking/>,
+      },
+      {
+        path: "allstaff",
+        element: <AllStaffForUser/>,
+      },
+      {
+        path: "singlestaff/:id",
+        element: <SingleStaffForUser/>,
+      },
+      {
+        path: "prescriptions/:id",
+        element: <MyPrescriptions/>,
+      },
+      
 
 
 
@@ -148,7 +192,9 @@ function App() {
 
  ])
 
-return <RouterProvider router={router} />;
+return <GoogleOAuthProvider clientId={clientId}>
+  <RouterProvider router={router} />
+</GoogleOAuthProvider>;
 }
 
 export default App;

@@ -1,8 +1,8 @@
 import React from "react";
 import DashboardLayout from "../../../layouts/DashboardLayout";
 import { Users, ClipboardList, Settings } from "lucide-react";
-import AllStaff from "./AllStaff";
-import AllUsers from "./AllUsers";
+// import AllStaff from "./AllStaff";
+// import AllUsers from "./AllUsers";
 
 const links = [
   { name: "All Users", path: "/admin/users", icon: <Users /> },
@@ -13,7 +13,7 @@ const links = [
 const AdminDashboard = () => {
   return (
     <DashboardLayout links={links}>
-      <AllStaff/>
+      {/* <AllStaff/> */}
      
     </DashboardLayout>
   );

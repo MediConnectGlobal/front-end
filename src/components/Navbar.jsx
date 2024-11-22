@@ -1,63 +1,148 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Menu, LogOut } from "lucide-react";
-import Navbar from "../components/Navbar";
+import { Menu, X, User } from 'lucide-react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import image from '../assets/images/logo2.png'
 
-const DashboardLayout = ({ children, links = [] }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Sidebar is open by default
+const Navbar = ({ isLoggedIn, userType, userProfile }) => {
+  const [isMenuOpen, setIsOpen] = useState(false);
+
+  // Helper function to get dashboard link based on user type
+  const getDashboardLink = () => {
+    switch(userType) {
+      case 'admin': return '/admin-dashboard';
+      case 'staff': return '/staff-dashboard';
+      default: return '/user-dashboard';
+    }
+  };
+
+  // Modified getNavLinks function
+  const getNavLinks = () => {
+    return (
+      <>
+        <Link to="/" className="text-[#0891B2] font-semibold hover:text-blue-600">
+          HOME
+        </Link>
+        <Link to="/services" className="text-[#0891B2] font-semibold hover:text-blue-600">
+          SERVICES
+        </Link>
+        <Link to="/staff" className="text-[#0891B2] font-semibold hover:text-blue-600">
+          STAFF
+        </Link>
+        <Link to="/contact" className="text-[#0891B2] font-semibold hover:text-blue-600">
+          ABOUT
+        </Link>
+      </>
+    );
+  };
+
+  const AuthButtons = () => (
+    <>
+      <Link
+        to="/register"
+        className="bg-cyan-500 hover:bg-cyan-600 rounded-lg text-white px-3 py-2"
+      >
+        Register
+      </Link>
+      <Link
+        to="/login"
+        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+      >
+        Login
+      </Link>
+    </>
+  );
+
+  const UserProfile = () => (
+    <div className="flex items-center space-x-4">
+      {/* <Link to="/profile" className="flex items-center space-x-2">
+        {userProfile?.image ? (
+          <img 
+            src={userProfile.image} 
+            alt="Profile" 
+            className="w-8 h-8 rounded-full"
+          />
+        ) : (
+          <User className="w-8 h-8 p-1 rounded-full bg-gray-200" />
+        )}
+        <span className="text-[#0891B2]">{userProfile?.name || 'My Profile'}</span>
+      </Link> */}
+      <Link
+        to={getDashboardLink()}
+        className="text-[#0891B2] font-semibold hover:text-blue-600"
+      >
+        My Dashboard
+      </Link>
+    </div>
+  );
 
   return (
-    <div className="h-screen flex flex-col">
-      {/* Navbar */}
-      <Navbar />
+    <nav className="bg-white shadow-md fixed top-0 w-full z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo and Brand */}
+          <div className="flex-shrink-0">
+            <Link to="/">
+              <img
+                className="h-20 w-56"
+                src={image}
+                alt="Logo"
+              />
+            </Link>
+          </div>
 
-      {/* Layout for Sidebar and Content */}
-      <div className="flex flex-1">
-        {/* Sidebar */}
-        <aside
-          className={`bg-[#0CBFC7] text-white w-64 transition-transform ${
-            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } md:translate-x-0`}
-          style={{
-            height: "calc(100vh - 5rem)", // Adjust for the navbar height (5rem)
-            position: "sticky",
-            top: "5rem", // Start below navbar
-          }}
-        >
-          <div className="p-4 flex items-center justify-between">
-            <h2 className="text-xl font-bold">Dashboard</h2>
+          {/* Desktop Navigation - Modified */}
+          <div className="hidden md:flex">
+            <div className="ml-10 flex items-center space-x-8">
+              {getNavLinks()}
+            </div>
+          </div>
+
+          {/* Auth Buttons or User Profile - Desktop */}
+          <div className="hidden md:flex items-center space-x-4">
+            {isLoggedIn ? <UserProfile /> : <AuthButtons />}
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
             <button
-              className="md:hidden"
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="text-gray-700 hover:text-blue-600"
+              onClick={() => setIsOpen(!isMenuOpen)}
             >
-              <Menu className="text-white" />
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
-          <ul className="space-y-4 p-4">
-            {links.map((link) => (
-              <li key={link.name}>
-                <Link to={link.path} className="flex items-center space-x-2">
-                  {link.icon}
-                  <span>{link.name}</span>
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Link to="/login" className="flex items-center space-x-2">
-                <LogOut />
-                <span>Logout</span>
-              </Link>
-            </li>
-          </ul>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 bg-gray-100 p-6 overflow-y-auto">
-          {children}
-        </main>
+        </div>
       </div>
-    </div>
+
+      {/* Mobile Menu - Modified */}
+      {isMenuOpen && (
+        <div className="md:hidden px-4 pt-4 pb-6">
+          {getNavLinks()}
+          <div className="pt-4 space-y-2 border-t border-gray-200 mt-4">
+            {isLoggedIn ? (
+              <>
+                <Link to="/profile" className="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50">
+                  My Profile
+                </Link>
+                <Link to={getDashboardLink()} className="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-blue-50">
+                  Dashboard
+                </Link>
+              </>
+            ) : (
+              <div className="space-y-2">
+                <Link to="/register" className="block w-full text-left px-3 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-md">
+                  Register
+                </Link>
+                <Link to="/login" className="block w-full text-left px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                  Login
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </nav>
   );
 };
 
-export default DashboardLayout;
+export default Navbar;

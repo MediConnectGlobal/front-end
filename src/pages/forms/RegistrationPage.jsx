@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import bgImage from '../../assets/images/bg1.jpg'; 
-// import AdminRegister from '../../pages/forms/AdminRegister';
+import AdminRegister from '../../pages/forms/AdminRegister';
 import StaffRegister from '../../pages/forms/StaffRegister';
 import UserRegister from '../../pages/forms/UserRegister';
 import RootLayout from '../../layouts/RootLayout';
@@ -12,8 +12,8 @@ const RegistrationPage = () => {
 
   const renderForm = () => {
     switch (selectedRole) {
-      // case 'admin':
-      //   return <AdminRegister navigate={navigate} />;
+      case 'admin':
+        return <AdminRegister navigate={navigate} />;
       case 'staff':
         return <StaffRegister navigate={navigate} />;
       case 'user':
@@ -44,12 +44,12 @@ const RegistrationPage = () => {
         >
           User
         </button>
-        {/* <button 
+        <button 
           className={getButtonStyles('admin')}
           onClick={() => handleRoleSelection('admin')}
         >
           Admin
-        </button> */}
+        </button>
         <button 
           className={getButtonStyles('staff')}
           onClick={() => handleRoleSelection('staff')}

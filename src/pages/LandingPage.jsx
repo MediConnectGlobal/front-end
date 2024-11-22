@@ -1,12 +1,39 @@
 import React from 'react';
 import heroImage from "../assets/images/hero7.jpg";
 import Navbar from '../components/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import HealthCareSection from '../components/HealthCareSection';
 import Footer from '../components/Footer';
-
+import Swal from 'sweetalert2';
 
 const LandingPage = () => {
+  const navigate = useNavigate();
+
+  const handleBookAppointment = () => {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      Swal.fire({
+        title: 'Login Required',
+        text: 'Please login or register to book an appointment',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#245294',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Login',
+        cancelButtonText: 'Register'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/login');
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          navigate('/register');
+        }
+      });
+    } else {
+      navigate('/user-dashboard');
+    }
+  };
+
   return (
     <div>
       {/* Fixed Navbar */}
@@ -27,10 +54,13 @@ const LandingPage = () => {
 
           {/* Buttons */}
           <div className="flex space-x-4 justify-end">
-            <Link to='/booking' className="bg-[#245294] hover:bg-[#1F3656] text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
+            <button 
+              onClick={handleBookAppointment}
+              className="bg-[#245294] hover:bg-[#1F3656] text-white font-semibold py-3 px-6 rounded-lg transition duration-300"
+            >
               Book an Appointment
-            </Link>
-            <Link to='/staff' className="bg-transparent border-2  text-white hover:bg-[#245294] hover:text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
+            </button>
+            <Link to='/staff' className="bg-transparent border-2 text-white hover:bg-[#245294] hover:text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
               View Doctors
             </Link>
           </div>

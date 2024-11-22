@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { apiLoginStaff } from '../../services/auth';
+import { apiLoginAdmin } from '../../services/auth';
 import Swal from 'sweetalert2';
 
-const StaffLogin = () => {
+const AdminLogin = () => {
       const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
 
@@ -20,36 +20,31 @@ const password = formData.get("password");
 
 try{
 setIsLoading(true);
-    const response = await apiLoginStaff({ email, password});
+    const response = await apiLoginAdmin({ email, password});
     console.log("response", response)
-    if (response.status == 200 ) {
+    if (response.status == 200) {
       localStorage.setItem("token", response.data.accessToken);
       console.log("token", response.data.accessToken)
-      localStorage.setItem("userType", "staff");
+      localStorage.setItem("userType", "admin");
       localStorage.setItem("user", JSON.stringify({
-        userType: "staff",
-        name: response.data.user?.firstName,
-        name: response.data.user?.lastName,
-        avatar: response.data.user?.avatar,
-        contact: response.data.user?.contact,
-          email: response.data.user?.email,
+        userType: "admin",
+        name: response.data.user?.name,
+        image: response.data.user?.image,
         // Add any other user data you need
       }));
 
       Swal.fire({
         icon: "success",
-        title: "Staff Login Successful",
+        title: "Admin Login Successful",
         text: "You have successfully logged into your account",
         confirmButtonText: "OK"
       }).then(() => {
-        navigate('/staff-dashboard');
+        navigate('/admin-dashboard');
       });
-    } else {
-      throw new Error('Invalid response data');
     }
 }
 catch (error) {  
-    console.error('Login error:', error);
+    console.log(error);
     if (error.status == 401) {
       Swal.fire({
         icon: 'error',
@@ -86,7 +81,7 @@ catch (error) {
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
         <div>
           <h2 className="text-center text-3xl font-extrabold text-gray-900">
-            Log in as a Staff
+            Log in as an Admin
           </h2>
         </div>
 
@@ -108,8 +103,8 @@ catch (error) {
               type="email"
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            //   value={formData.email}
-            //   onChange={handleChange}
+              // value={formData.email}
+              // onChange={handleChange}
             />
           </div>
 
@@ -124,8 +119,8 @@ catch (error) {
               type="password"
               required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            //   value={formData.password}
-            //   onChange={handleChange}
+              // value={formData.password}
+              // onChange={handleChange}
             />
           </div>
 
@@ -208,4 +203,4 @@ catch (error) {
   );
 };
 
-export default StaffLogin;
+export default AdminLogin;

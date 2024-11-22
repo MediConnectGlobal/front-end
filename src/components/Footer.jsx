@@ -2,17 +2,17 @@ import { ChevronRight, Mail, MapPin, Phone } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 mb-0">
+    <footer className="bg-[#0891B2] text-gray-300 mb-0 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center">
-              <span className="text-2xl font-bold text-blue-500">Medi</span>
+              <span className="text-2xl font-bold text-blue-900">Medi</span>
               <span className="text-2xl font-bold text-white">Connect</span>
             </div>
             <p className="text-sm">
-              Making healthcare accessible and convenient for everyone.
+              Making healthcare accessible, convenient and comfortable for everyone.
             </p>
             <div className="space-y-2">
               <div className="flex items-center">
@@ -35,25 +35,25 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-white mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#about" className="hover:text-blue-500 flex items-center">
+                <a href="#about" className="hover:text-blue-800 flex items-center">
                   <ChevronRight className="h-4 w-4 mr-1" />
                   About Us
                 </a>
               </li>
               <li>
-                <a href="#services" className="hover:text-blue-500 flex items-center">
+                <a href="#services" className="hover:text-blue-800 flex items-center">
                   <ChevronRight className="h-4 w-4 mr-1" />
                   Our Services
                 </a>
               </li>
               <li>
-                <a href="#doctors" className="hover:text-blue-500 flex items-center">
+                <a href="/staff" className="hover:text-blue-800 flex items-center">
                   <ChevronRight className="h-4 w-4 mr-1" />
-                  Our Doctors
+                  Our Staff
                 </a>
               </li>
               <li>
-                <a href="#appointments" className="hover:text-blue-500 flex items-center">
+                <a href="#appointments" className="hover:text-blue-800 flex items-center">
                   <ChevronRight className="h-4 w-4 mr-1" />
                   Book Appointment
                 </a>
@@ -66,25 +66,25 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-white mb-4">Our Services</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#general" className="hover:text-blue-500 flex items-center">
+                <a href="#general" className="hover:text-blue-800 flex items-center">
                   <ChevronRight className="h-4 w-4 mr-1" />
                   General Consultation
                 </a>
               </li>
               <li>
-                <a href="#specialist" className="hover:text-blue-500 flex items-center">
+                <a href="#specialist" className="hover:text-blue-800 flex items-center">
                   <ChevronRight className="h-4 w-4 mr-1" />
                   Specialist Consultation
                 </a>
               </li>
-              <li>
-                <a href="#emergency" className="hover:text-blue-500 flex items-center">
+              {/* <li>
+                <a href="#emergency" className="hover:text-blue-800 flex items-center">
                   <ChevronRight className="h-4 w-4 mr-1" />
                   Emergency Services
                 </a>
-              </li>
+              </li> */}
               <li>
-                <a href="#online" className="hover:text-blue-500 flex items-center">
+                <a href="#online" className="hover:text-blue-800 flex items-center">
                   <ChevronRight className="h-4 w-4 mr-1" />
                   Online Consultation
                 </a>
@@ -108,10 +108,10 @@ const Footer = () => {
                 <span>Sunday:</span>
                 <span>10:00 AM - 4:00 PM</span>
               </li>
-              <li className="flex justify-between text-red-400">
+              {/* <li className="flex justify-between text-red-400">
                 <span>Emergency:</span>
                 <span>24/7</span>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
@@ -123,13 +123,13 @@ const Footer = () => {
               © 2024 MediConnect. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#terms" className="text-sm hover:text-blue-500">
+              <a href="#terms" className="text-sm hover:text-blue-800">
                 Terms of Service
               </a>
-              <a href="#privacy" className="text-sm hover:text-blue-500">
+              <a href="#privacy" className="text-sm hover:text-blue-800">
                 Privacy Policy
               </a>
-              <a href="#cookies" className="text-sm hover:text-blue-500">
+              <a href="#cookies" className="text-sm hover:text-blue-800">
                 Cookie Policy
               </a>
             </div>

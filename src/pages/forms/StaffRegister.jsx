@@ -1,7 +1,32 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { apiRegisterStaff } from '../../services/auth';
+import { apiRegisterStaff, apiGoogleRegister } from '../../services/auth';
+import { GoogleLogin } from '@react-oauth/google';
+import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+
+const MEDICAL_SPECIALTIES = [
+  'Doctor',
+  'Nurse',
+  'Dentist',
+  'Dietician',
+  'Specialist',
+  'Pharmacist',
+  'Dermatologist',
+  'Cardiologist',
+  'Anesthesiologist',
+  'Gynecologist',
+  'Midwife',
+  'Speech-Language Therapist',
+  'Thereapist',
+  'Radiologist',
+  'Surgeon',
+  'Optometrist (eyes)',
+  'Psychologist',
+  'Psychiatrist',
+  'Audiologist (ear)',
+  'Others'
+];
 
 const StaffRegister = () => {
   const [loading, setLoading] = useState(false);
@@ -36,7 +61,7 @@ const StaffRegister = () => {
       if (response.status == 201) {
         Swal.fire({
           icon: "Success",
-          title: "Registered Successfully",
+          title: "Staff Registered Successfully",
           text: "You have successfully created an account",
           confirmButtonText: " OK"
         });
@@ -49,7 +74,7 @@ const StaffRegister = () => {
       Swal.fire({
         icon: "Warning",
         title: "Registration failed.",
-        text: "User already exists.",
+        text: "Staff already exists.",
         confirmButtonText: " OK"
       });
 
@@ -69,18 +94,40 @@ const StaffRegister = () => {
     }
   };
 
-  const handleGoogleSignup = () => {
-    console.log('Google Sign-In clicked');
-    toast.info('Google Sign-In feature coming soon!');
+  const handleGoogleSignup = async (credentialResponse) => {
+    try {
+      const response = await apiGoogleRegister({
+        credential: credentialResponse.credential,
+        userType: 'staff' // Specify that this is staff registration
+      });
+
+      if (response.status === 201) {
+        Swal.fire({
+          icon: "success",
+          title: "Staff Registration Successful",
+          text: "You have successfully registered with Google",
+          confirmButtonText: "OK"
+        });
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error('Google registration error:', error);
+      Swal.fire({
+        icon: "error",
+        title: "Registration Failed",
+        text: error.message || "Unable to register with Google. Please try again.",
+        confirmButtonText: "OK"
+      });
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="">
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-md">
         <h2 className="text-center text-3xl font-extrabold text-gray-900">Staff Registration</h2>
         
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm space-y-4">
+          <div className=" space-y-4">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">First Name</label>
@@ -143,31 +190,6 @@ const StaffRegister = () => {
                   placeholder="Contact"
                 />
               </div>
-              {/* <div>
-                <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location</label>
-                <input
-                  id="location"
-                  name="location"
-                  type="text"
-                  required
-                  className="mt-1 block w-full px-3 py-2 border rounded-md text-gray-900 focus:ring-indigo-500 focus:border-indigo-500"
-                  placeholder="Location"
-                />
-              </div> */}
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div>
-                <label htmlFor="position" className="block text-sm font-medium text-gray-700">Specialty</label>
-                <input
-                  id="specialty"
-                  name="specialty"
-                  type="text"
-                  required
-                  className="mt-1 block w-full px-3 py-2 border rounded-md text-gray-900 focus:ring-indigo-500 focus:border-indigo-500"
-                  placeholder="Specialty"
-                />
-              </div>
               <div>
                 <label htmlFor="licenceNumber" className="block text-sm font-medium text-gray-700">Licence Number</label>
                 <input
@@ -183,7 +205,27 @@ const StaffRegister = () => {
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="facility" className="block text-sm font-medium text-gray-700">Facility</label>
+                <label htmlFor="specialty" className="block text-sm font-medium text-gray-700">
+                  Specialty
+                </label>
+                <select
+                  id="specialty"
+                  name="specialty"
+                  required
+                  className="mt-1 block w-full px-3 py-2 border rounded-md text-gray-900 focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                  <option value="">Select a specialty</option>
+                  {MEDICAL_SPECIALTIES.map((specialty, index) => (
+                    <option key={index} value={specialty}>
+                      {specialty}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="facility" className="block text-sm font-medium text-gray-700">
+                  Facility
+                </label>
                 <input
                   id="facility"
                   name="facility"
@@ -193,6 +235,10 @@ const StaffRegister = () => {
                   placeholder="Facility"
                 />
               </div>
+            </div>
+
+            <div className="">
+              
               <div>
                 <label htmlFor="department" className="block text-sm font-medium text-gray-700">Department</label>
                 <input
@@ -229,18 +275,17 @@ const StaffRegister = () => {
           </div>
 
           <div className="mt-6">
-            <button
-              onClick={handleGoogleSignup}
-              className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
-                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-              </svg>
-              Register with Google
-            </button>
+            <GoogleLogin
+              onSuccess={handleGoogleSignup}
+              onError={() => {
+                toast.error('Google Sign-In failed');
+              }}
+              useOneTap
+              shape="rectangular"
+              theme="filled_blue"
+              text="continue_with"
+              width="100%"
+            />
           </div>
         </div>
 

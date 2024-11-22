@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { apiGetAllStaff } from '../services/staff';
-import img from '../assets/images/hero10.jpg';
+// import { apiGetAllStaff, } from '../services/staff';
+import img from '../../../assets/images/hero10.jpg';
 import {useNavigate} from 'react-router-dom';
-import RootLayout from '../layouts/RootLayout';
+import { apiGetAllStaff } from '../../../services/staff';
 
-const StaffComponent = () => {
+const AllStaffForUser = () => {
     const [staffList, setStaffList] = useState([]);
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -31,19 +32,6 @@ const navigate = useNavigate();
         getAllStaff();
     }, []);
 
-    // const getStaffById = async (id) => {
-    //     setLoading(true);
-    //     try {
-    //         const response = await apiGetSingleStaff(id);
-    //         setStaffDetail(response.data);
-    //         setError(null);
-    //     } catch (error) {
-    //         console.error("Error fetching staff by ID:", error);
-    //         setError('Error fetching staff by ID');
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
 
     // Pagination logic
     const indexOfLastStaff = currentPage * staffPerPage;
@@ -53,8 +41,7 @@ const navigate = useNavigate();
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
-       <RootLayout>
-         <div className="container mx-auto p-4 mt-24">
+        <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold text-cyan-500 text-center mb-6">Meet Our Team</h1>
             {loading && <p className="text-center">Loading...</p>}
             {error && <p className="text-center text-red-500">{error}</p>}
@@ -63,7 +50,7 @@ const navigate = useNavigate();
                     <div
                         key={staff.id}
                         className="bg-white shadow-md rounded-lg p-4 text-center transition-transform transform hover:scale-105 hover:shadow-lg"
-                        onClick={() => navigate(`/staff/${staff.id}`)}
+                        onClick={() => navigate(`/user-dashboard/singlestaff/${staff.id}`)}
                     >
                         <img
                             src={img} // Replace with staff.image if available
@@ -103,20 +90,8 @@ const navigate = useNavigate();
                 ))}
             </div>
 
-            {/* {staffDetail && (
-                <div className="bg-gray-100 p-4 mt-6 rounded-lg">
-                    <h2 className="text-xl font-bold">Staff Details</h2>
-                    <p>Name: {staffDetail.firstName} {staffDetail.lastName}</p>
-                    <p>Role: {staffDetail.role}</p>
-                    <p>Facility: {staffDetail.facility}</p>
-                    <p>Department: {staffDetail.department}</p>
-                    <p>Email: {staffDetail.email}</p>
-                    <p>Specialty: {staffDetail.specialty}</p>
-                </div>
-            )} */}
         </div>
-       </RootLayout>
     );
 };
 
-export default StaffComponent;
+export default AllStaffForUser;

@@ -7,3 +7,10 @@ export const apiCreateBooking = async (payload) => apiClient.post("/bookings", p
 
 
 export const apiUpdateBooking = async (bookingId, updatedData) => apiClient.post(`/bookings/${bookingId}`, updatedData);
+
+
+export const apiGetAllUsers = async (token) => {
+  return apiClient.get("/users", {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
