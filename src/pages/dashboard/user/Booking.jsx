@@ -10,8 +10,8 @@ const Booking = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [staffList, setStaffList] = useState([]); // For the staff dropdown
-//   const [userId, setUserId] = useState(''); // For the logged-in user's ID
-//   const [usersList, setUsersList] = useState([]);
+  //   const [userId, setUserId] = useState(''); // For the logged-in user's ID
+  //   const [usersList, setUsersList] = useState([]);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -79,51 +79,51 @@ const Booking = () => {
     }));
   };
 
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setLoading(true);
+  //   const handleSubmit = async (e) => {
+  //     e.preventDefault();
+  //     setLoading(true);
 
-//     const payload = {
-//       ...formData,
-//     //   userId, // Include user ID from state
-//       startDateTime: new Date(formData.startDateTime).toISOString(),
-//       endDateTime: new Date(formData.endDateTime).toISOString(),
-//     };
+  //     const payload = {
+  //       ...formData,
+  //     //   userId, // Include user ID from state
+  //       startDateTime: new Date(formData.startDateTime).toISOString(),
+  //       endDateTime: new Date(formData.endDateTime).toISOString(),
+  //     };
 
-//     try {
-//       const response = await apiCreateBooking(payload);
-// // console.log
-//       if (response.ok) {
-//         Swal.fire({
-//           title: 'success!',
-//           text: 'Appointment booked successfully',
-//           icon: 'success',
-//           confirmButtonText: 'OK',
-//         });
-//         navigate('');
-//       }
-//     } catch (error) {
-//       Swal.fire({
-//         title: 'Error!',
-//         text: 'Failed to book appointment',
-//         icon: 'error',
-//         confirmButtonText: 'OK',
-//       });
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  //     try {
+  //       const response = await apiCreateBooking(payload);
+  // // console.log
+  //       if (response.ok) {
+  //         Swal.fire({
+  //           title: 'success!',
+  //           text: 'Appointment booked successfully',
+  //           icon: 'success',
+  //           confirmButtonText: 'OK',
+  //         });
+  //         navigate('');
+  //       }
+  //     } catch (error) {
+  //       Swal.fire({
+  //         title: 'Error!',
+  //         text: 'Failed to book appointment',
+  //         icon: 'error',
+  //         confirmButtonText: 'OK',
+  //       });
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     const payload = {
       ...formData,
       startDateTime: new Date(formData.startDateTime).toISOString(),
       endDateTime: new Date(formData.endDateTime).toISOString(),
     };
-  
+
     try {
       const response = await apiCreateBooking(payload);
       if (response.status === 201) {
@@ -148,37 +148,37 @@ const handleSubmit = async (e) => {
       setLoading(false);
     }
   };
-  
+
 
 
 
   return (
-    
-      <div
-        className=""
-        
+
+    <div
+      className=""
+
+    >
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md space-y-6"
       >
-        <form
-          onSubmit={handleSubmit}
-          className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md space-y-6"
-        >
-          <h2 className="text-2xl font-bold mb-6 text-center">Book an Appointment</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Book an Appointment</h2>
 
-          <label htmlFor="title" className="block text-sm font-medium mb-2">
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded mb-4"
-            placeholder="e.g., Follow-up Consultation"
-          />
+        <label htmlFor="title" className="block text-sm font-medium mb-2">
+          Title
+        </label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          required
+          className="w-full p-2 border border-gray-300 rounded mb-4"
+          placeholder="e.g., Follow-up Consultation"
+        />
 
-          {/* <label htmlFor="userId" className="block text-sm font-medium mb-2">
+        {/* <label htmlFor="userId" className="block text-sm font-medium mb-2">
             Select User
           </label>
           <select
@@ -197,98 +197,97 @@ const handleSubmit = async (e) => {
             ))}
           </select> */}
 
-          <label htmlFor="staffId" className="block text-sm font-medium mb-2">
-            Select Staff
-          </label>
-          <select
-            id="staffId"
-            name="staffId"
-            value={formData.staffId}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded mb-4"
-          >
-            <option value="">Select Staff</option>
-            {staffList.map((staff) => (
-              <option key={staff.id} value={staff.id}>
-                {staff.firstName} {staff.lastName} - {staff.facility}
-              </option>
-            ))}
-          </select>
+        <label htmlFor="staffId" className="block text-sm font-medium mb-2">
+          Select Staff
+        </label>
+        <select
+          id="staffId"
+          name="staffId"
+          value={formData.staffId}
+          onChange={handleChange}
+          required
+          className="w-full p-2 border border-gray-300 rounded mb-4"
+        >
+          <option value="">Select Staff</option>
+          {staffList.map((staff) => (
+            <option key={staff.id} value={staff.id}>
+              {staff.firstName} {staff.lastName} - {staff.facility}
+            </option>
+          ))}
+        </select>
 
-          <label htmlFor="location" className="block text-sm font-medium mb-2">
-            Location
-          </label>
-          <select
-            id="location"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded mb-4"
-          >
-            <option value="">Select Location</option>
-            <option value="Online">Online</option>
-            <option value="Inperson">In-person</option>
-            <option value="Hybrid">Hybrid</option>
-          </select>
+        <label htmlFor="location" className="block text-sm font-medium mb-2">
+          Location
+        </label>
+        <select
+          id="location"
+          name="location"
+          value={formData.location}
+          onChange={handleChange}
+          required
+          className="w-full p-2 border border-gray-300 rounded mb-4"
+        >
+          <option value="">Select Location</option>
+          <option value="Online">Online</option>
+          <option value="Inperson">In-person</option>
+          <option value="Hybrid">Hybrid</option>
+        </select>
 
-          <label htmlFor="facility" className="block text-sm font-medium mb-2">
-            Facility
-          </label>
-          <input
-            type="text"
-            id="facility"
-            name="facility"
-            value={formData.facility}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border border-gray-300 rounded mb-4"
-            placeholder="e.g., Main Clinic Building"
-          />
+        <label htmlFor="facility" className="block text-sm font-medium mb-2">
+          Facility
+        </label>
+        <input
+          type="text"
+          id="facility"
+          name="facility"
+          value={formData.facility}
+          onChange={handleChange}
+          required
+          className="w-full p-2 border border-gray-300 rounded mb-4"
+          placeholder="e.g., Main Clinic Building"
+        />
 
-          <div className="flex flex-col sm:flex-row gap-4 mb-4">
-            <div className="w-full sm:w-1/2">
-              <label htmlFor="startDateTime" className="block text-sm font-medium mb-2">
-                Start Date & Time
-              </label>
-              <input
-                type="datetime-local"
-                id="startDateTime"
-                name="startDateTime"
-                value={formData.startDateTime}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-
-            <div className="w-full sm:w-1/2">
-              <label htmlFor="endDateTime" className="block text-sm font-medium mb-2">
-                End Date & Time
-              </label>
-              <input
-                type="datetime-local"
-                id="endDateTime"
-                name="endDateTime"
-                value={formData.endDateTime}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
+        <div className="flex flex-col sm:flex-row gap-4 mb-4">
+          <div className="w-full sm:w-1/2">
+            <label htmlFor="startDateTime" className="block text-sm font-medium mb-2">
+              Start Date & Time
+            </label>
+            <input
+              type="datetime-local"
+              id="startDateTime"
+              name="startDateTime"
+              value={formData.startDateTime}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded"
+            />
           </div>
 
-          <button
-            type="submit"
-            className="w-full py-2 px-4 bg-blue-600 text-white font-bold rounded hover:bg-blue-700"
-            disabled={loading}
-          >
-            {loading ? 'Booking' : 'Book Appointment'}
-          </button>
-        </form>
-      </div>
-    
+          <div className="w-full sm:w-1/2">
+            <label htmlFor="endDateTime" className="block text-sm font-medium mb-2">
+              End Date & Time
+            </label>
+            <input
+              type="datetime-local"
+              id="endDateTime"
+              name="endDateTime"
+              value={formData.endDateTime}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          className="w-full py-2 px-4 bg-blue-600 text-white font-bold rounded hover:bg-blue-700"
+          disabled={loading}
+        >
+          {loading ? 'Booking' : 'Book Appointment'}
+        </button>
+      </form>
+    </div>
   );
 };
 
