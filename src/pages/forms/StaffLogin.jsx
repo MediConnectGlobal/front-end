@@ -28,8 +28,8 @@ setIsLoading(true);
       localStorage.setItem("userType", "staff");
       localStorage.setItem("user", JSON.stringify({
         userType: "staff",
-        name: response.data.user?.firstName,
-        name: response.data.user?.lastName,
+        firstName: response.data.user?.firstName,
+        lastName: response.data.user?.lastName,
         avatar: response.data.user?.avatar,
         contact: response.data.user?.contact,
           email: response.data.user?.email,
