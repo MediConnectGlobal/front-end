@@ -133,7 +133,7 @@ const handleSubmit = async (e) => {
           icon: 'success',
           confirmButtonText: 'OK',
         });
-        navigate('/');
+        navigate('');
       } else {
         throw new Error(response.data.message || 'Failed to book appointment');
       }
