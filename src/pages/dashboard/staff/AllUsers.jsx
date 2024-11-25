@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import img from '../../../assets/images/hero10.jpg';
+// import img from '../../../assets/images/hero10.jpg';
 import { apiGetAllUsers } from '../../../services/user'; // Update service import
 
 const AllUsers = () => {
@@ -50,22 +50,23 @@ const AllUsers = () => {
                         onClick={() => navigate(`/staff-dashboard/singleuser/${user.id}`)} // Updated route
                     >
                         <img
-                            src={img} // Replace with user.image if available
+                            src='' // Replace with user.image if available
                             alt={`${user.firstName} ${user.lastName}`}
                             className="rounded-full mx-auto mb-4 w-32 h-32 object-cover"
                         />
                         <h2 className="text-lg font-bold">{`${user.firstName} ${user.lastName}`}</h2>
                         <p className="text-sm text-gray-600">{user.role}</p> {/* Replace 'specialty' */}
-                        <p className="text-sm text-gray-600">{user.location || 'N/A'}</p> {/* Replace 'facility' */}
+                        {/* <p className="text-sm text-gray-600">{user.location || 'N/A'}</p>  */}
+                        {/* Replace 'facility' */}
                         <div className="mt-4">
                             <p className="text-sm text-gray-500">📞 {user.contact}</p>
                             <p className="text-sm text-gray-500">📧 {user.email}</p>
                         </div>
-                        <div className="flex justify-center mt-4 space-x-4 text-gray-500">
+                        {/* <div className="flex justify-center mt-4 space-x-4 text-gray-500">
                             <a href="#" className="hover:text-gray-900">Facebook</a>
                             <a href="#" className="hover:text-gray-900">Twitter</a>
                             <a href="#" className="hover:text-gray-900">Instagram</a>
-                        </div>
+                        </div> */}
                     </div>
                 ))}
             </div>

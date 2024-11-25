@@ -13,8 +13,27 @@ const links = [
 const AdminDashboard = () => {
   return (
     <DashboardLayout links={links}>
-      {/* <AllStaff/> */}
-     
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Stats Cards */}
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h3 className="text-lg font-semibold mb-2">Total Users</h3>
+          {/* Content */}
+        </div>
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h3 className="text-lg font-semibold mb-2">Total Staff</h3>
+          {/* Content */}
+        </div>
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h3 className="text-lg font-semibold mb-2">Total Bookings</h3>
+          {/* Content */}
+        </div>
+
+        {/* Full Width Section */}
+        <div className="col-span-1 md:col-span-2 lg:col-span-3 bg-white p-4 rounded-lg shadow">
+          <h3 className="text-lg font-semibold mb-2">Recent Activity</h3>
+          {/* Content */}
+        </div>
+      </div>
     </DashboardLayout>
   );
 };

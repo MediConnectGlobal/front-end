@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import bgImage from '../../assets/images/bg1.jpg'; 
+import bgImage from '../../assets/images/hero2.jpg'; 
 import AdminRegister from '../../pages/forms/AdminRegister';
 import StaffRegister from '../../pages/forms/StaffRegister';
 import UserRegister from '../../pages/forms/UserRegister';

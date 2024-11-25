@@ -12,7 +12,7 @@ import LoginPage from './pages/forms/LoginPage';
 import StaffLogin from './pages/forms/StaffLogin';
 import Services from './pages/empty/services';
 import Doctors from './pages/empty/Doctors';
-import Contact from './pages/empty/Contact';
+import Contact from './pages/empty/About';
 import RootLayout from './layouts/RootLayout';
 import HealthCareSection from './components/HealthCareSection';
 import StaffCarousel from './constants/Staff';
@@ -32,6 +32,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import Prescription from './pages/dashboard/staff/Prescription';
 import MyPrescriptions from './pages/dashboard/user/MyPrescriptions';
 import MyBookings from './pages/dashboard/staff/MyBookings';
+import About from './pages/empty/About';
 
 
 
@@ -108,8 +109,8 @@ function App() {
       element: <Doctors />,
     },
     {
-      path: "/contact",
-      element: <Contact />,
+      path: "/about",
+      element: <About/>,
     },
 
     {

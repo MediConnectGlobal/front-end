@@ -1,8 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { apiGetAllStaff } from '../services/staff';
-import img from '../assets/images/hero10.jpg';
+import { User } from 'lucide-react';
 import {useNavigate} from 'react-router-dom';
 import RootLayout from '../layouts/RootLayout';
+// Import staff images
+import doctor1 from '../assets/images/hero1.jpg';
+import doctor2 from '../assets/images/hero10.jpg';
+import doctor3 from '../assets/images/hero7.jpg';
+import doctor4 from '../assets/images/hero6.jpg';
+import doctor5 from '../assets/images/about3.jpg';
+import doctor6 from '../assets/images/hero8.jpg';
+
+// Create an array of images instead of an object
+const doctorImages = [
+    doctor1,
+    doctor2,
+    doctor3,
+    doctor4,
+    doctor5,
+    doctor6
+];
 
 const StaffComponent = () => {
     const [staffList, setStaffList] = useState([]);
@@ -31,20 +48,7 @@ const navigate = useNavigate();
         getAllStaff();
     }, []);
 
-    // const getStaffById = async (id) => {
-    //     setLoading(true);
-    //     try {
-    //         const response = await apiGetSingleStaff(id);
-    //         setStaffDetail(response.data);
-    //         setError(null);
-    //     } catch (error) {
-    //         console.error("Error fetching staff by ID:", error);
-    //         setError('Error fetching staff by ID');
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
+    
     // Pagination logic
     const indexOfLastStaff = currentPage * staffPerPage;
     const indexOfFirstStaff = indexOfLastStaff - staffPerPage;
@@ -59,14 +63,14 @@ const navigate = useNavigate();
             {loading && <p className="text-center">Loading...</p>}
             {error && <p className="text-center text-red-500">{error}</p>}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {currentStaff.map((staff) => (
+                {currentStaff.map((staff, index) => (
                     <div
                         key={staff.id}
-                        className="bg-white shadow-md rounded-lg p-4 text-center transition-transform transform hover:scale-105 hover:shadow-lg"
+                        className="bg-white shadow-md rounded-lg p-4 text-center transition-transform transform hover:scale-105 hover:shadow-lg cursor-pointer"
                         onClick={() => navigate(`/staff/${staff.id}`)}
                     >
                         <img
-                            src={img} // Replace with staff.image if available
+                            src={doctorImages[index % doctorImages.length]}
                             alt={`${staff.firstName} ${staff.lastName}`}
                             className="rounded-full mx-auto mb-4 w-32 h-32 object-cover"
                         />
@@ -76,11 +80,6 @@ const navigate = useNavigate();
                         <div className="mt-4">
                             <p className="text-sm text-gray-500">📞 {staff.contact}</p>
                             <p className="text-sm text-gray-500">📧 {staff.email}</p>
-                        </div>
-                        <div className="flex justify-center mt-4 space-x-4 text-gray-500">
-                            <a href="#" className="hover:text-gray-900">Facebook</a>
-                            <a href="#" className="hover:text-gray-900">Twitter</a>
-                            <a href="#" className="hover:text-gray-900">Instagram</a>
                         </div>
                     </div>
                 ))}

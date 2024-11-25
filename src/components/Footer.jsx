@@ -1,4 +1,5 @@
 import { ChevronRight, Mail, MapPin, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -17,11 +18,11 @@ const Footer = () => {
             <div className="space-y-2">
               <div className="flex items-center">
                 <Phone className="h-4 w-4 mr-2" />
-                <span>+233 123 456 789</span>
+                <span>+233 559 259 661</span>
               </div>
               <div className="flex items-center">
                 <Mail className="h-4 w-4 mr-2" />
-                <span>contact@mediconnect.com</span>
+                <span>mediconnect@gmail.com</span>
               </div>
               <div className="flex items-center">
                 <MapPin className="h-4 w-4 mr-2" />
@@ -34,12 +35,14 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold text-white mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              <li>
-                <a href="#about" className="hover:text-blue-800 flex items-center">
+              
+                <Link to='/about'
+                  className="hover:text-blue-800 flex items-center">
                   <ChevronRight className="h-4 w-4 mr-1" />
                   About Us
-                </a>
-              </li>
+                </Link>
+            
+
               <li>
                 <a href="#services" className="hover:text-blue-800 flex items-center">
                   <ChevronRight className="h-4 w-4 mr-1" />
@@ -132,6 +135,7 @@ const Footer = () => {
               <a href="#cookies" className="text-sm hover:text-blue-800">
                 Cookie Policy
               </a>
+
             </div>
           </div>
         </div>

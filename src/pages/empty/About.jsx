@@ -4,7 +4,7 @@ import { MapPin, Phone, Mail, Clock, Send, Heart, Users, Shield, Activity } from
 import Swal from 'sweetalert2';
 import aboutImage from '../../assets/images/about1.jpg';
 
-const Contact = () => {
+const About = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -246,4 +246,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default About;

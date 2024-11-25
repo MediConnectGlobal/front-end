@@ -1,18 +1,32 @@
 import React, { useEffect, useState } from 'react';
-// import { apiGetAllStaff, } from '../services/staff';
-import img from '../../../assets/images/hero10.jpg';
 import {useNavigate} from 'react-router-dom';
 import { apiGetAllStaff } from '../../../services/staff';
+// Import staff images
+import doctor1 from '../../../assets/images/hero1.jpg';
+import doctor2 from '../../../assets/images/hero10.jpg';
+import doctor3 from '../../../assets/images/hero7.jpg';
+import doctor4 from '../../../assets/images/hero6.jpg';
+import doctor5 from '../../../assets/images/about3.jpg';
+import doctor6 from '../../../assets/images/hero8.jpg';
+
+// Create an array of images
+const doctorImages = [
+    doctor1,
+    doctor2,
+    doctor3,
+    doctor4,
+    doctor5,
+    doctor6
+];
 
 const AllStaffForUser = () => {
     const [staffList, setStaffList] = useState([]);
-
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [staffPerPage] = useState(6); // Display 6 staff members per page
+    const [staffPerPage] = useState(6);
 
-const navigate = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getAllStaff = async () => {
@@ -32,8 +46,6 @@ const navigate = useNavigate();
         getAllStaff();
     }, []);
 
-
-    // Pagination logic
     const indexOfLastStaff = currentPage * staffPerPage;
     const indexOfFirstStaff = indexOfLastStaff - staffPerPage;
     const currentStaff = staffList.slice(indexOfFirstStaff, indexOfLastStaff);
@@ -46,14 +58,14 @@ const navigate = useNavigate();
             {loading && <p className="text-center">Loading...</p>}
             {error && <p className="text-center text-red-500">{error}</p>}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {currentStaff.map((staff) => (
+                {currentStaff.map((staff, index) => (
                     <div
                         key={staff.id}
                         className="bg-white shadow-md rounded-lg p-4 text-center transition-transform transform hover:scale-105 hover:shadow-lg"
                         onClick={() => navigate(`/user-dashboard/singlestaff/${staff.id}`)}
                     >
                         <img
-                            src={img} // Replace with staff.image if available
+                            src={doctorImages[index % doctorImages.length]}
                             alt={`${staff.firstName} ${staff.lastName}`}
                             className="rounded-full mx-auto mb-4 w-32 h-32 object-cover"
                         />

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { apiGetBookings, apiUpdateBooking } from '../../../services/booking';
+import { apiGetSingleUser } from '../../../services/user';
 import { Calendar, Clock, Check, X, AlertCircle } from 'lucide-react';
 import Swal from 'sweetalert2';
 
@@ -14,33 +15,41 @@ const MyBookings = () => {
 
   const fetchBookings = async () => {
     try {
-      const response = await apiGetBookings();
-      console.log("Raw response:", response);
+      const userType = localStorage.getItem('userType');
+      const token = localStorage.getItem('token');
       
-      // Get bookings from the schedules array
-      const allBookings = response.data.schedules;
-      console.log("All bookings:", allBookings);
-      
-      // Get current staff ID from localStorage
-      const currentUser = JSON.parse(localStorage.getItem('user'));
-      console.log("Current user:", currentUser);
-      
-      if (!currentUser || !currentUser.id) {
-        throw new Error('User ID not found');
+      if (!token) {
+        throw new Error('Not authenticated');
       }
 
-      // Filter bookings for the current staff member
-      const myBookings = allBookings.filter(booking => {
-        console.log("Checking booking:", booking);
-        console.log("Comparing IDs:", {
-          bookingStaffId: booking.staffId,
-          currentStaffId: currentUser.id
-        });
-        return booking.staffId === currentUser.id;
-      });
+      const userData = JSON.parse(localStorage.getItem('user'));
+      console.log('User Data:', userData);
 
-      console.log("Filtered bookings:", myBookings);
-      setBookings(myBookings);
+      if (!userData || !userData._id) {
+        const userResponse = await apiGetSingleUser('me');
+        console.log('User Response:', userResponse.data);
+        
+        if (!userResponse.data || !userResponse.data._id) {
+          throw new Error('User data not available');
+        }
+        
+        localStorage.setItem('user', JSON.stringify(userResponse.data));
+        userData = userResponse.data;
+      }
+
+      if (userType !== 'STAFF') {
+        throw new Error('Unauthorized access');
+      }
+
+      const response = await apiGetBookings(userData._id);
+      console.log("Bookings response:", response);
+
+      if (response.data) {
+        setBookings(response.data);
+      } else {
+        setBookings([]);
+      }
+      
       setError(null);
     } catch (error) {
       console.error('Error in fetchBookings:', error);
@@ -66,12 +75,7 @@ const MyBookings = () => {
         const response = await apiUpdateBooking(bookingId, { status: newStatus });
         
         if (response.data) {
-          // Update local state
-          setBookings(prevBookings =>
-            prevBookings.map(booking =>
-              booking._id === bookingId ? { ...booking, status: newStatus } : booking
-            )
-          );
+          await fetchBookings();
 
           Swal.fire({
             title: 'Updated!',

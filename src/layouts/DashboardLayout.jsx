@@ -12,6 +12,7 @@ import {
 import Navbar from "../components/Navbar";
 import Swal from 'sweetalert2';
 import { apiGetSingleStaff } from "../services/staff";
+import { Menu as MenuIcon } from 'lucide-react';
 
 const DashboardLayout = ({ links = [], children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -362,7 +363,10 @@ const DashboardLayout = ({ links = [], children }) => {
     console.log('Current staff data:', staff);
   }, [userProfile, staff]);
 
-  
+  const toggleSidebar = () => {
+    console.log('Toggling sidebar from:', isSidebarOpen, 'to:', !isSidebarOpen);
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   return (
     <div>
@@ -373,12 +377,32 @@ const DashboardLayout = ({ links = [], children }) => {
           userProfile={userProfile}
         />
       </div>
+      
+      <button
+        onClick={toggleSidebar}
+        className="fixed top-24 left-4 z-20 md:hidden bg-[#0CBFC7] p-2 rounded-md hover:bg-[#0ba4ab]"
+      >
+        <MenuIcon className="h-6 w-6 text-white" />
+      </button>
+
       <div className="flex h-screen mt-20">
         {/* Sidebar */}
         <div
-          className={`bg-[#0CBFC7] text-white w-64 fixed h-screen transition-transform ${
-            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } md:translate-x-0`}
+          className={`
+            fixed 
+            bg-[#0CBFC7] 
+            text-gray-800 
+            w-64 
+            h-[calc(100vh-80px)] 
+            transition-transform 
+            duration-300 
+            ease-in-out 
+            ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+            md:translate-x-0 
+            flex 
+            flex-col
+            z-10
+          `}
         >
           {/* Profile Section */}
           <div className="p-6 border-b border-[#0ba4ab]">
@@ -404,47 +428,29 @@ const DashboardLayout = ({ links = [], children }) => {
                     onClick={handleEditProfile}
                     className="absolute bottom-2 right-0 bg-[#245294] p-2 rounded-full hover:bg-[#1F3656] transition-colors"
                   >
-                    <Edit size={16} />
+                    <Edit size={16} className="text-white" />
                   </button>
                 </div>
               )}
-              <h3 className="text-lg font-semibold text-center">
+              <h3 className="text-lg font-semibold text-gray-800 text-center">
                 {userProfile?.firstName} {userProfile?.lastName}
               </h3>
-              <p className="text-sm text-gray-200 mt-1">{userProfile?.email}</p>
-              {userProfile?.contact && (
-                <p className="text-sm text-gray-200 mt-1">
-                  <Phone size={14} className="inline mr-1" />
-                  {userProfile.contact}
-                </p>
-              )}
-              {userProfile?.specialty && (
-                <p className="text-sm text-gray-200 mt-1">
-                  Specialty: {userProfile.specialty}
-                </p>
-              )}
-              <p className="text-xs text-gray-200 mt-1 uppercase bg-[#245294] px-3 py-1 rounded-full">
+              <p className="text-sm text-gray-700 mt-1">{userProfile?.email}</p>
+              <p className="text-xs text-white mt-1 uppercase bg-[#245294] px-3 py-1 rounded-full">
                 {userType}
               </p>
-              <button
-                onClick={handleShare}
-                className="mt-2 flex items-center text-sm hover:text-gray-200"
-              >
-                <Share2 size={14} className="mr-1" />
-                Share Profile
-              </button>
             </div>
           </div>
 
           {/* Navigation Links */}
-          <div className="p-4">
-            <h2 className="text-xl font-bold mb-4">Dashboard</h2>
+          <div className="flex-grow p-4">
+            <h2 className="text-xl font-bold mb-4 text-gray-800">Dashboard</h2>
             <ul className="space-y-4">
               {links.map((link) => (
                 <li key={link.name}>
                   <Link 
                     to={link.path} 
-                    className="flex items-center space-x-2 p-2 hover:bg-[#0ba4ab] rounded-lg transition-colors"
+                    className="flex items-center space-x-2 p-2 text-gray-700 hover:bg-[#0ba4ab] hover:text-white rounded-lg transition-colors"
                   >
                     {link.icon}
                     <span>{link.name}</span>
@@ -455,10 +461,10 @@ const DashboardLayout = ({ links = [], children }) => {
           </div>
 
           {/* Logout Button */}
-          <div className="absolute  w-full p-4 border-t border-[#0ba4ab]">
+          <div className="p-4 border-t border-[#0ba4ab] mt-auto">
             <button 
               onClick={handleLogout}
-              className="flex items-center space-x-2 text-white hover:text-red-200 w-full p-2 hover:bg-[#0ba4ab] rounded-lg transition-colors"
+              className="flex items-center space-x-2 text-gray-700 hover:text-white w-full p-2 hover:bg-[#245294] rounded-lg transition-colors"
             >
               <LogOut size={20} />
               <span>Logout</span>
@@ -466,9 +472,25 @@ const DashboardLayout = ({ links = [], children }) => {
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="flex-1 bg-gray-100 p-6 overflow-auto justify-center ml-64">
-          <Outlet />
+        {/* Main Content - Updated for responsiveness */}
+        <div 
+          className={`
+            flex-1 
+            bg-gray-100 
+            p-4 md:p-6  /* Smaller padding on mobile */
+            overflow-auto 
+            transition-all 
+            duration-300 
+            ${isSidebarOpen ? 'md:ml-64' : 'ml-0'}
+            w-full
+            mt-16 md:mt-0  /* Account for mobile header */
+          `}
+        >
+          <div className="max-w-7xl mx-auto">  {/* Container for content */}
+            <div className="grid grid-cols-1 gap-4 md:gap-6">  {/* Responsive grid */}
+              <Outlet />
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -28,7 +28,7 @@ const Navbar = ({ isLoggedIn, userType, userProfile }) => {
         <Link to="/staff" className="text-[#0891B2] font-semibold hover:text-blue-600">
           STAFF
         </Link>
-        <Link to="/contact" className="text-[#0891B2] font-semibold hover:text-blue-600">
+        <Link to="/about" className="text-[#0891B2] font-semibold hover:text-blue-600">
           ABOUT
         </Link>
       </>
@@ -117,7 +117,9 @@ const Navbar = ({ isLoggedIn, userType, userProfile }) => {
       {/* Mobile Menu - Modified */}
       {isMenuOpen && (
         <div className="md:hidden px-4 pt-4 pb-6">
-          {getNavLinks()}
+          <div className="flex flex-col space-y-4">
+            {getNavLinks()}
+          </div>
           <div className="pt-4 space-y-2 border-t border-gray-200 mt-4">
             {isLoggedIn ? (
               <>

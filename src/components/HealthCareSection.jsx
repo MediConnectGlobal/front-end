@@ -1,6 +1,7 @@
 import React from 'react';
 import about3 from '../assets/images/about1.jpg'
 import about2 from '../assets/images/about2.webp'
+import { Link } from 'react-router-dom';
 
 const HealthCareSection = () => {
   return (
@@ -39,9 +40,11 @@ const HealthCareSection = () => {
             <span className="mr-2">✔</span> Comprehensive health checkups and preventive care.
           </li>
         </ul>
+        <Link to="/about">
         <button className="px-6 py-3 border-2 border-blue-500 text-blue-500 rounded-md hover:bg-blue-500 hover:text-white transition">
           Learn More
         </button>
+        </Link>
       </div>
     </section>
   );
